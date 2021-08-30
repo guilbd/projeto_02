@@ -11,6 +11,8 @@ const ObjectId = mongodb.ObjectId;
 
     const port = 3000;
 
+    const connectionString = `mongodb://localhost:27017/blue_db`;
+
     app.get('/', (req, res) => {
         res.send({ info: 'olá mundo'});
     });

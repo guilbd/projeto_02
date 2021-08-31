@@ -1,17 +1,25 @@
 const express = require('express');
 const mongodb = require('mongodb');
+require("dotenv").config();
 
 const ObjectId = mongodb.ObjectId;
 
 (async () => {
 
+    const dbHost = process.env.DB_HOST;
+
+    const dbPort = process.env.DB_PORT;
+
+    const dbName = process.env.DB_NAME;
+
     const app = express();
 
     app.use(express.json());
 
-    const port = 3000;
+    //process.env.PORT utilizado quando for feito o deploy (nuvem).
+    const port = process.env.PORT || 3000;
 
-    const connectionString = `mongodb://localhost:27017/blue_db`;
+    const connectionString = `mongodb://${dbHost}:${dbPort}/${dbName}`;
     
     const options = {
         useUnifiedTopology: true,

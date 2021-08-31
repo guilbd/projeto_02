@@ -25,16 +25,36 @@ const ObjectId = mongodb.ObjectId;
         useUnifiedTopology: true,
     };
 
+    //mongodb.MongoClient.connect é a conexão do BD em si
     const client = await mongodb.MongoClient.connect(connectionString, options);
 
+    //variável para simplificar a identificação do BD que está sendo trabalhado
     const db = client.db('blue_db');
 
     const personagens = db.collection('personagens');
 
+    // .find({}) para criar um array
     const getPersonagensValidas = () => personagens.find({}).toArray();
 
+    // ObjectId facilita eliminando o indexOf
     const getPersonagemById = async(id) => personagens.findOne({_id: ObjectId(id)});
+
+    //cors
+    app.all("/*", (req, res, next) => {
+		res.header("Access-Control-Allow-Origin", "*");
+
+        // "*" - libera todos os métodos, get, post... se fosse colocado "GET" só autorizaria o GET
+		res.header("Access-Control-Allow-Methods", "*");
+
+		res.header(
+			"Access-Control-Allow-Headers",
+			"Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization"
+		);
+
+		next();
+	});
     
+    //rota primária do backend
     app.get('/', (req, res) => {
         res.send({ info: 'olá mundo'});
     });
@@ -51,14 +71,15 @@ const ObjectId = mongodb.ObjectId;
         res.send(await getPersonagensValidas());
     });
 
+    //[POST] -incluindo um personagem
     app.post('/personagens', async (req, res) => {
         const objeto = req.body;
 
         if (!objeto || !objeto.nome || !objeto.imagemURL){
-            res.send("Objeto inválido")
+            res.send("Requisição inválida, certifique-se que tenha os campos nome e imagemURL.")
             return;
         }
-        const {insertedCount} = await personagens.insertOne(objeto);
+        const insertedCount = await personagens.insertOne(objeto);
         
         if(!insertedCount){
             res.send("Ocorreu um erro");
@@ -68,15 +89,16 @@ const ObjectId = mongodb.ObjectId;
         }
     });
         
+    //[PUT] - atualizar personagem
     app.put('/personagens/:id', async (req, res) => {
         const id = req.params.id;
         const objeto = req.body;
         res.send(await personagens.updateOne(
             {
-                _id: ObjectId(id),
+                _id: ObjectId(id), //procura o id solicitado na requisição
             },
             {
-                $set: objeto,
+                $set: objeto, // após o id localizado ele seta o objeto
             }
         ));
     });

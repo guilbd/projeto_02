@@ -39,11 +39,58 @@ const ObjectId = mongodb.ObjectId;
         res.send({ info: 'olá mundo'});
     });
 
+    // [GET] GetPersonagemById
+    app.get('/personagens/:id', async (req, res) =>{
+        const id = req.params.id;
+        const personagem = await getPersonagemById(id);
+        res.send(personagem);
+    })
 
-
+    // [GET] GetAllPersonagens
     app.get('/personagens', async (req, res) => {
         res.send(await getPersonagensValidas());
     });
+
+    app.post('/personagens', async (req, res) => {
+        const objeto = req.body;
+
+        if (!objeto || !objeto.nome || !objeto.imagemURL){
+            res.send("Objeto inválido")
+            return;
+        }
+        const {insertedCount} = await personagens.insertOne(objeto);
+        
+        if(!insertedCount){
+            res.send("Ocorreu um erro");
+            return;
+        } else {
+            res.send(objeto);
+        }
+    });
+        
+    app.put('/personagens/:id', async (req, res) => {
+        const id = req.params.id;
+        const objeto = req.body;
+        res.send(await personagens.updateOne(
+            {
+                _id: ObjectId(id),
+            },
+            {
+                $set: objeto,
+            }
+        ));
+    });
+        
+    app.delete('/personagens/:id', async (req, res) => {
+        const id = req.params.id;
+        
+        res.send(await personagens.deleteOne(
+            {
+                _id: ObjectId(id),
+            })
+        );
+    });    
+    
 
     app.listen(port, () => {
         console.info(`App rodando em http://localhost:${port}`);

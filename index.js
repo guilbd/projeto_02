@@ -6,11 +6,13 @@ const ObjectId = mongodb.ObjectId;
 
 (async () => {
 
-    const dbHost = process.env.DB_HOST;
+    const dbUser = process.env.DB_USER;
 
-    const dbPort = process.env.DB_PORT;
+    const dbPassword = process.env.DB_PASSWORD;
 
     const dbName = process.env.DB_NAME;
+
+    const dbChar = process.env.DB_CHAR;
 
     const app = express();
 
@@ -19,7 +21,8 @@ const ObjectId = mongodb.ObjectId;
     //process.env.PORT utilizado quando for feito o deploy (nuvem).
     const port = process.env.PORT || 3000;
 
-    const connectionString = `mongodb://${dbHost}:${dbPort}/${dbName}`;
+    const connectionString = `mongodb+srv://${dbUser}:${dbPassword}@cluster0.${dbChar}.mongodb.net/${dbName}?retryWrites=true&w=majority`
+    // const connectionString = `mongodb://${dbHost}:${dbPort}/${dbName}`;
     
     const options = {
         useUnifiedTopology: true,
@@ -27,6 +30,8 @@ const ObjectId = mongodb.ObjectId;
 
     //mongodb.MongoClient.connect é a conexão do BD em si
     const client = await mongodb.MongoClient.connect(connectionString, options);
+
+    
 
     //variável para simplificar a identificação do BD que está sendo trabalhado
     const db = client.db('blue_db');
@@ -39,7 +44,7 @@ const ObjectId = mongodb.ObjectId;
     // ObjectId facilita eliminando o indexOf
     const getPersonagemById = async(id) => personagens.findOne({_id: ObjectId(id)});
 
-    //cors
+    //CORS
     app.all("/*", (req, res, next) => {
 		res.header("Access-Control-Allow-Origin", "*");
 

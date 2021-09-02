@@ -27,8 +27,12 @@ const ObjectId = mongodb.ObjectId;
     useUnifiedTopology: true,
   };
 
+  console.info("Conectando ao MongoDB Atlas...");
+
   //mongodb.MongoClient.connect é a conexão do BD em si
   const client = await mongodb.MongoClient.connect(connectionString, options);
+
+  console.info("Conexão estabelecida com o MongoDB Atlas com sucesso!");
 
   //variável para simplificar a identificação do BD que está sendo trabalhado
   const db = client.db("blue_db");

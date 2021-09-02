@@ -84,14 +84,16 @@ const ObjectId = mongodb.ObjectId;
             res.send("Requisição inválida, certifique-se que tenha os campos nome e imagemURL.")
             return;
         }
-        const insertedCount = await personagens.insertOne(objeto);
+        const result = await personagens.insertOne(objeto);
         
-        if(!insertedCount){
+        console.log(result);
+
+        if(!result.acknowledged == false){
             res.send("Ocorreu um erro");
             return;
-        } else {
-            res.send(objeto);
-        }
+        };
+        res.send(objeto);
+        
     });
         
     //[PUT] - atualizar personagem

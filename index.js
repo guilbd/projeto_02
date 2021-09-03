@@ -70,6 +70,10 @@ const ObjectId = mongodb.ObjectId;
   app.get("/personagens/:id", async (req, res) => {
     const id = req.params.id;
     const personagem = await getPersonagemById(id);
+    if (!personagem) {
+      res.status(404).send({ error: "Personagem especificado não foi encontrado."});
+      return;
+    };
     res.send(personagem);
   });
 
@@ -82,17 +86,17 @@ const ObjectId = mongodb.ObjectId;
   app.post("/personagens", async (req, res) => {
     const objeto = req.body;
 
-    if (!objeto || !objeto.nome || !objeto.imagemURL) {
+    if (!objeto || !objeto.nome || !objeto.imagemUrl) {
       res.send(
         "Requisição inválida, certifique-se que tenha os campos nome e imagemURL."
       );
       return;
-    }
+    };
     const result = await personagens.insertOne(objeto);
 
-    console.log(result);
+    //console.log(result);
 
-    if (!result.acknowledged == false) {
+    if (result.acknowledged == false) {
       res.send("Ocorreu um erro");
       return;
     }

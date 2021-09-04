@@ -6,6 +6,7 @@ require("express-async-errors");
 //requires de endpoints
 const home = require("./components/home/home");
 const readAll = require("./components/read-all/read-all");
+const readById = require("./components/read-by-id/read-by-id");
 
 (async () => {
   const dbUser = process.env.DB_USER;
@@ -60,17 +61,7 @@ const readAll = require("./components/read-all/read-all");
 
   //[GET] getPersonagemById
 
-  app.get("/personagens/find/:id", async (req, res) => {
-    const id = req.params.id;
-    const personagem = await getPersonagemById(id);
-    if (!personagem) {
-      res
-        .status(404)
-        .send({ error: "O personagem especificado não foi encontrado" });
-      return;
-    }
-    res.send(personagem);
-  });
+  app.use("/personagens/read-by-id/", readById);
 
   //[POST] Adicona personagem
   app.post("/personagens", async (req, res) => {

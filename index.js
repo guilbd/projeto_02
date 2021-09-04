@@ -56,11 +56,11 @@ const readAll = require("./components/read-all/read-all");
   app.use("/home", home);
 
   // criando a rota read-all
-  app.use("read-all", readAll);
+  app.use("/personagens/read-all", readAll);
 
   //[GET] getPersonagemById
 
-  app.get("/personagens/:id", async (req, res) => {
+  app.get("/personagens/find/:id", async (req, res) => {
     const id = req.params.id;
     const personagem = await getPersonagemById(id);
     if (!personagem) {

@@ -3,6 +3,7 @@ const mongodb = require("mongodb");
 const ObjectId = mongodb.ObjectId;
 require("dotenv").config();
 require("express-async-errors");
+var cors = require("cors");
 //requires de endpoints
 const home = require("./components/home/home");
 const readAll = require("./components/read-all/read-all");
@@ -43,7 +44,7 @@ const criar = require("./components/create/create");
 
 	//CORS
 
-	app.all("/*", (req, res, next) => {
+	/* app.all("/*", (req, res, next) => {
 		res.header(
 			"Access-Control-Allow-Origin",
 			"https://front-rick-morty-blue.herokuapp.com"
@@ -57,7 +58,10 @@ const criar = require("./components/create/create");
 		);
 
 		next();
-	});
+	}); */
+
+	app.use(cors());
+	app.options("*", cors());
 
 	//Criando a rota home
 	app.use("/home", home);

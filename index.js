@@ -46,8 +46,7 @@ const criar = require("./components/create/create");
 	app.all("/*", (req, res, next) => {
 		res.header(
 			"Access-Control-Allow-Origin",
-			"https://front-rick-morty-blue.herokuapp.com",
-			"https://front-rick-morty-blue.herokuapp.com/add"
+			"https://front-rick-morty-blue.herokuapp.com"
 		);
 
 		res.header("Access-Control-Allow-Methods", "*");

@@ -47,10 +47,10 @@ const criar = require("./components/create/create");
 		res.header(
 			"Access-Control-Allow-Origin",
 			"https://front-rick-morty-blue.herokuapp.com",
-			"https://front-rick-morty-blue.herokuapp.com/update/",
-			"https://front-rick-morty-blue.herokuapp.com/delete/",
-			"https://front-rick-morty-blue.herokuapp.com/view/",
-			"https://front-rick-morty-blue.herokuapp.com/add/"
+			"https://front-rick-morty-blue.herokuapp.com/update",
+			"https://front-rick-morty-blue.herokuapp.com/delete",
+			"https://front-rick-morty-blue.herokuapp.com/view",
+			"https://front-rick-morty-blue.herokuapp.com/add"
 		);
 
 		res.header("Access-Control-Allow-Methods", "*");

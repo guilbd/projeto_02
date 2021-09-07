@@ -21,7 +21,7 @@ router.use("/", async (req, res) => {
         "Personagem inválido, certifique-se que tenha os campos nome e imagemUrl",
     });
     return;
-  }
+  };
 
   const result = await personagens.insertOne(objeto);
 
@@ -30,7 +30,7 @@ router.use("/", async (req, res) => {
   if (result.acknowledged == false) {
     res.status(500).send({ error: "Ocorreu um erro" });
     return;
-  }
+  };
 
   res.status(200).send(objeto);
 });

@@ -13,7 +13,6 @@ const client = new mongodb.MongoClient(connectionString, options)
 const db = client.db("blue_db");
 const personagens = db.collection("personagens");
 
-
 async function conexao() {
   try{
     await client.connect()
@@ -21,8 +20,7 @@ async function conexao() {
   }
   catch(err){
     console.log(err)
-  }
-  
+  }  
 };
 
 module.exports = { conexao,db, personagens};

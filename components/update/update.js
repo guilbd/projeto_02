@@ -2,22 +2,23 @@ const express = require("express");
 const router = express.Router();
 const mongodb = require("mongodb");
 const ObjectId = mongodb.ObjectId;
-(async () => {
-  const dbUser = process.env.DB_USER;
-  const dbPassword = process.env.DB_PASSWORD;
-  const dbName = process.env.DB_NAME;
-  const dbChar = process.env.DB_CHAR;
-  const connectionString = `mongodb+srv://${dbUser}:${dbPassword}@cluster0.${dbChar}.mongodb.net/${dbName}?retryWrites=true&w=majority`;
-  const options = {
-    useUnifiedTopology: true,
-  };
-  const client = await mongodb.MongoClient.connect(connectionString, options);
+const { conexao, personagens, db } = require("../conexao");
+// (async () => {
+//   const dbUser = process.env.DB_USER;
+//   const dbPassword = process.env.DB_PASSWORD;
+//   const dbName = process.env.DB_NAME;
+//   const dbChar = process.env.DB_CHAR;
+//   const connectionString = `mongodb+srv://${dbUser}:${dbPassword}@cluster0.${dbChar}.mongodb.net/${dbName}?retryWrites=true&w=majority`;
+//   const options = {
+//     useUnifiedTopology: true,
+//   };
+//   const client = await mongodb.MongoClient.connect(connectionString, options);
 
-  const db = client.db("blue_db");
-  const personagens = db.collection("personagens");
+//   const db = client.db("blue_db");
+//   const personagens = db.collection("personagens");
 
-  const getPersonagemById = async (id) =>
-    personagens.findOne({ _id: ObjectId(id) });
+//   const getPersonagemById = async (id) =>
+//     personagens.findOne({ _id: ObjectId(id) });
 
   //Middleware - especifica que é esse o import do router no index que queremos utilizar
   router.use(function timelog(req, res, next) {
@@ -27,6 +28,7 @@ const ObjectId = mongodb.ObjectId;
 
   //[PUT] Atualizar personagem
   router.put("/:id", async (req, res) => {
+    await conexao();
     const id = req.params.id;
     console.log(id);
     const objeto = req.body;
@@ -65,8 +67,9 @@ const ObjectId = mongodb.ObjectId;
         .send({ error: "Ocorreu um erro ao atualizar o personagem" });
       return;
     }
-    res.send(await getPersonagemById(id));
+    const personagem = await personagens.findOne({ _id: ObjectId(id) });
+    res.send(personagem);
   });
-})();
+
 
 module.exports = router;

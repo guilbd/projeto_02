@@ -60,7 +60,11 @@ const criar = require("./components/create/create");
 		next();
 	}); */
 
+
+  //CORS NOVO
+  //Libera o CORS
 	app.use(cors());
+  //Ativa todos os pre-flight
 	app.options("*", cors());
 
 	//Criando a rota home
